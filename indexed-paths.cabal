@@ -1,0 +1,31 @@
+cabal-version:       >=1.10
+
+name:                indexed-paths
+version:             0.1.0.0
+author:              Isaac Elliott
+maintainer:          isaace71295@gmail.com
+build-type:          Simple
+
+library
+  hs-source-dirs:      
+    src
+  exposed-modules:     
+    Data.Path.Class,
+    Data.Path.DList,
+    Data.Path.Lens,
+    Data.Path.List,
+    Data.Path.Sequence,
+    Data.Path.Vector,
+    Data.Path.Trie
+  build-depends:       
+    base >=4.13 && <5,
+    bifunctors,
+    containers,
+    dependent-map,
+    dependent-sum,
+    lens,
+    vector
+  default-language:    
+    Haskell2010
+  ghc-options:    
+    -Wall -Werror

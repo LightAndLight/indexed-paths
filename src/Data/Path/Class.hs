@@ -113,5 +113,5 @@ compose . singleton = id
 ```
 
 -}
-compose :: Category l => p l a b -> l a b
+compose :: (IsPath p, Category l) => p l a b -> l a b
 compose = composeMap id

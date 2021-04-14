@@ -12,6 +12,7 @@ module Data.Path.Class (
   IsPath (..),
   empty,
   append,
+  compose
 ) where
 
 import Control.Category (Category)
@@ -43,8 +44,6 @@ cons a empty = singleton = snoc empty a
 composeR cons p empty = p
 
 composeL snoc empty p = p
-
-forget . singleton = id
 ```
 
 -}
@@ -67,9 +66,9 @@ class (forall l. Category (p l)) => IsPath (p :: (k -> k -> *) -> k -> k -> *) w
         z
       UnconsSome lab bc ->
         composeL f (f z lab) bc
-
-  forget :: Category l => p l a b -> l a b
-  forget = composeL (Category.>>>) Category.id
+        
+  composeMap :: Category c => (forall x y. l x y -> c x y) -> p l a b -> c a b
+  composeMap f = composeL (\acc l -> acc Category.>>> f l) Category.id
 
   singleton :: l a b -> p l a b
   singleton l = cons l empty
@@ -106,3 +105,13 @@ empty = Category.id
 
 append :: IsPath p => p l a b -> p l b c -> p l a c
 append = flip (Category..)
+
+{-|
+
+```
+compose . singleton = id
+```
+
+-}
+compose :: Category l => p l a b -> l a b
+compose = composeMap id

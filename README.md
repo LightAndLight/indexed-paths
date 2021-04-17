@@ -131,3 +131,91 @@ actMany = composeMap act
 ```
 
 ### Lensing
+
+Quivers of kind `Type -> Type -> Type` (quivers where the vertices are Haskell types),
+can be used to describe the structure of datatypes.
+
+Examples:
+
+```haskell
+data Pair a b = Pair a b
+
+{-
+Pair a b gives rise to the graph
+
+    Pair a b
+       / \
+     Fst  Snd
+     /     \
+    v       v
+    a       b
+
+which can be encoded as the graph
+-}
+
+data PairG :: * -> * -> * where
+  Fst :: PairG (Pair a b) a
+  Snd :: PairG (Pair a b) b
+```
+
+```haskell
+data Sum a b = Left a | Right b
+
+{-
+
+    Sum a b
+       / \
+      L   R
+     /     \
+    v       v
+    a       b
+
+-}
+
+data SumG :: * -> * -> * where
+  L :: SumG (Either a b) a
+  R :: SumG (Either a b) b
+```
+
+```haskell
+data List a = Nil | Cons a (List a)
+
+{-
+
+      List a <-+
+      /  \     |
+    Head  Tail-+
+     |     
+     v       
+     a       
+
+-}
+
+data ListG :: * -> * -> * where
+  Head :: ListG (List a) a
+  Tail :: ListG (List a) (List a)
+```
+
+When a datatype-graph contains loops, such as `List`, `Path` can be used
+to name items that are deeply nested in the datatype.
+
+```haskell
+{-
+
+Cons 1 (Cons 2 (Cons 3 Nil))
+         p1: ^
+-}
+
+p1 = Path.cons Tail (Path.singleton Head)
+
+
+{-
+
+Cons 1 (Cons 2 (Cons 3 Nil))
+                 p2: ^
+-}
+
+p2 = Path.cons Tail (Path.cons Tail (Path.singleton Head))
+```
+
+TBC

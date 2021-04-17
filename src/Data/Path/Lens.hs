@@ -1,35 +1,33 @@
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE RoleAnnotations #-}
-module Data.Path.Lens (Contextual(..), pathed, I(..)) where
+{-# LANGUAGE TypeFamilies #-}
 
-import Data.Path.Class (IsPath)
-import qualified Data.Path.Class as Path
+module Data.Path.Lens (ToTraversal (..), pathed, T (..), I (..)) where
+
+import Control.Category (Category)
+import qualified Control.Category (Category (..))
+import Control.Lens.At (Index, IxValue, Ixed (..))
 import Control.Lens.Traversal (Traversal')
-import Control.Lens.Internal (Context(..))
-import Control.Lens.At (Index, IxValue, Ixed(..))
+import Data.Path.Class (IsPath (composeMap))
 
-class Contextual (l :: * -> * -> *) where
-  contextOf :: l a b -> Maybe (Context b b a)
+class ToTraversal (l :: * -> * -> *) where
+  toTraversal :: l a b -> Traversal' a b
 
-pathed :: (IsPath p, Contextual l) => p l a b -> Traversal' a b
-pathed p f a =
-  case Path.uncons p of
-    Path.UnconsEmpty ->
-      f a
-    Path.UnconsSome l p' ->
-      case contextOf l of
-        Nothing ->
-          pure a
-        Just (Context build val) ->
-          build <$> pathed p' f val
+newtype T a b = T {unT :: Traversal' a b}
+
+instance Category T where
+  id = T id
+  (.) (T a) (T b) = T (b . a)
+
+pathed :: (IsPath p, ToTraversal l) => p l a b -> Traversal' a b
+pathed = unT . composeMap (\l -> T (toTraversal l))
 
 newtype I (p :: (* -> * -> *) -> (* -> * -> *)) (l :: * -> * -> *) (a :: *) (b :: *) = I a
 type role I nominal nominal representational nominal
 
 type instance Index (I p l a b) = p l a b
 type instance IxValue (I p l a b) = b
-instance (IsPath p, Contextual l) => Ixed (I p l a b) where
+instance (IsPath p, ToTraversal l) => Ixed (I p l a b) where
   ix p f (I a) = I <$> pathed p f a

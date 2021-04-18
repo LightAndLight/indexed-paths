@@ -8,8 +8,8 @@ index_dir=$(dirname "$index_html")
 
 echo "Copying docs to docs/$(basename "$index_dir")..."
 
-cp -R $(dirname "$index_html") docs/
+cp -R $(dirname "$index_html")/* docs/
 
-chmod +w docs/indexed-paths/*
+chmod +w docs/*
 
 echo "Done."

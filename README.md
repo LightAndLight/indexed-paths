@@ -9,6 +9,7 @@ A library for working with 'free categories'. Docs are [here](https://blog.ielli
     * State machines
     * Lensing
 * How have I used it?
+* Prior Art
 
 ## Explanation
 
@@ -268,3 +269,15 @@ I started using a free-category-based path for better type safety, which meant l
 type checking' and simpler editing code. Then when I realised that paths could be mapped to
 `Traversal'`, I was able to delete most of the code required to edit the syntax tree and re-use 
 `lens` instead.
+
+## Prior Art
+
+A Google search for "free category hackage" gives me these two packages:
+
+* https://hackage.haskell.org/package/free-categories
+* https://hackage.haskell.org/package/free-category
+
+The former has an extensive treatment of quivers, but I don't know how to apply any of the
+constructions.
+
+The latter briefly explores the idea of more efficient representations for free categories.

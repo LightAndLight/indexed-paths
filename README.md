@@ -1,6 +1,6 @@
 # `indexed-paths`
 
-A library for working with 'free categories'. Docs are [here](blog.ielliott.io/indexed-paths).
+A library for working with 'free categories'. Docs are [here](https://blog.ielliott.io/indexed-paths).
 
 ## Contents
 

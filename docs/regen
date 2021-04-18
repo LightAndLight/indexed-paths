@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+index_html=$(cabal new-haddock 2>/dev/null | tail -n 1)
+
+index_dir=$(dirname "$index_html")
+
+echo "Copying docs to docs/$(basename "$index_dir")..."
+
+cp -R $(dirname "$index_html") docs/
+
+chmod +w docs/indexed-paths/*
+
+echo "Done."

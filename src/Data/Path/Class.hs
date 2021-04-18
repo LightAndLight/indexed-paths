@@ -40,7 +40,7 @@ data SplitAt (p :: (k -> k -> *) -> k -> k -> *) (l :: k -> k -> *) (a :: k) :: 
 
 Laws:
 
-```
+@
 uncons (cons a b) = UnconsSome a b
 
 unsnoc (snoc a b) = UnsnocSome a b
@@ -52,7 +52,7 @@ composeR cons p empty = p
 composeL snoc empty p = p
 
 splitAt n xs = SplitAt a b ==> append a b = xs
-```
+@
 -}
 class (forall l. Category (p l)) => IsPath (p :: (k -> k -> *) -> k -> k -> *) where
   cons :: l a b -> p l b c -> p l a c
@@ -115,9 +115,9 @@ append = flip (Category..)
 
 {- |
 
-```
+@
 compose . singleton = id
-```
+@
 -}
 compose :: (IsPath p, Category l) => p l a b -> l a b
 compose = composeMap id

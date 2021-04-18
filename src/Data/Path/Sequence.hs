@@ -7,6 +7,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeOperators #-}
 
+{- |
+
+A path type based on @Data.Sequence.Seq@
+-}
 module Data.Path.Sequence (Path) where
 
 import Control.Category (Category)

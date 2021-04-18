@@ -2,6 +2,10 @@
 {-# LANGUAGE QuantifiedConstraints #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+{- |
+
+An efficient mapping from paths to values.
+-}
 module Data.Path.Trie (
   Trie,
   empty,

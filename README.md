@@ -1,15 +1,16 @@
 # `indexed-paths`
 
-A library for working with 'free categories'.
+A library for working with 'free categories'. Docs are [here](blog.ielliott.io/indexed-paths).
 
 ## Contents
 
-* What is this?
+* Explanation
 * Applications
     * State machines
     * Lensing
+* How have I used it?
 
-## What is this?
+## Explanation
 
 We're going to build some graphs. Suppose `k` is the kind of vertices in your
 graph. If you you define a type `G :: k -> k -> Type`, then each value of type
@@ -254,3 +255,16 @@ Just 1
 
 -}
 ```
+
+## How have I used it?
+
+I came across these ideas while developing structured code editors. Editor state commonly
+includes a syntax tree paired with a 'path', which 'points' to the currently focused node.
+Edit actions then use the path to traverse the syntax tree and apply the relevant update to
+the focused node. `Trie`s map paths to nodes, and can be used to efficiently annotate the 
+syntax tree with warnings and errors.
+
+I started using a free-category-based path for better type safety, which meant less 'runtime
+type checking' and simpler editing code. Then when I realised that paths could be mapped to
+`Traversal'`, I was able to delete most of the code required to edit the syntax tree and re-use 
+`lens` instead.

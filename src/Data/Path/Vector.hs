@@ -7,6 +7,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeOperators #-}
 
+{- |
+
+A path type based on @Data.Vector.Vector@
+-}
 module Data.Path.Vector (Path) where
 
 import Control.Category (Category)

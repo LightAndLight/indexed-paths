@@ -4,7 +4,17 @@
 {-# LANGUAGE RoleAnnotations #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Data.Path.Lens (ToTraversal (..), pathed, T (..), I (..)) where
+module Data.Path.Lens (
+  -- * Traversals
+  ToTraversal (..),
+  pathed,
+
+  -- ** Helpers
+  T (..),
+
+  -- * `Ixed`
+  I (..),
+) where
 
 import Control.Category (Category)
 import qualified Control.Category (Category (..))
@@ -24,7 +34,15 @@ instance Category T where
 pathed :: (IsPath p, ToTraversal l) => p l a b -> Traversal' a b
 pathed = unT . composeMap (\l -> T (toTraversal l))
 
+{- | @I p l a b@ wraps an `a` such that a path @p l a b@ can be used as an index to traverse a @b@
+
+ @
+ ix :: p l a b -> Traversal' (I p l a b) b
+ ix = pathed
+ @
+-}
 newtype I (p :: (* -> * -> *) -> (* -> * -> *)) (l :: * -> * -> *) (a :: *) (b :: *) = I a
+
 type role I nominal nominal representational nominal
 
 type instance Index (I p l a b) = p l a b

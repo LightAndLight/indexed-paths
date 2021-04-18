@@ -3,7 +3,7 @@
 {-# LANGUAGE PolyKinds #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Data.Path.DList (Path, fromList, toList) where
+module Data.Path.DList (Path (..), fromList, toList) where
 
 import Control.Category (Category)
 import qualified Control.Category (Category (..))

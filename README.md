@@ -67,8 +67,8 @@ When it comes to representing sequences in programming, a linked list
 is not always the best choice. There are a variety of sequence types with
 operations that differ in space and time usage. `Path`s, being fundamentally
 sequences, are also subject to the same considerations. This library defines
-a few different representations, to allow efficient use of `Path`s in various
-circumstances.
+a few different representations and a type class for common operations, which 
+allows efficient use of `Path`s in various circumstances.
 
 ## Applications
 
@@ -218,4 +218,39 @@ Cons 1 (Cons 2 (Cons 3 Nil))
 p2 = Path.cons Tail (Path.cons Tail (Path.singleton Head))
 ```
 
-TBC
+This is very similar to the idea of a 
+[`Traversal'`](https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Traversal.html#t:Traversal-39-),
+and this package provides a way to map paths into `Traversal'`s.
+
+```haskell
+instance ToTraversal ListG where
+  toTraversal g =
+    case g of
+      Head ->
+        \f l -> case l of
+          Nil ->
+            pure l
+          Cons a b ->
+            (\a' -> Cons a' b) <$> f a
+      Tail ->
+        \f l -> case l of
+          Nil ->
+            pure l
+          Cons a b ->
+            Cons a <$> f b
+
+list = Cons 1 (Cons 2 (Cons 3 Nil))
+
+{-
+
+> list ^? pathed (Path.cons Tail (Path.cons Tail (Path.singleton Head)))
+Just 3
+
+> list ^? pathed (Path.cons Tail (Path.cons Tail (Path.cons Tail (Path.singleton Head))))
+Nothing
+
+> list ^? pathed (Path.singleton Head)
+Just 1
+
+-}
+```
